@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="WEB-INF/template/Layout.xhtml">
+
+	<ui:define name="titulo">
+		CRUD de Processos
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<f:metadata>
+			<f:viewAction action="#{gestaoProcessoView.todosProcessos}" />
+		</f:metadata>
+
+		<h:form>
+
+			<p:messages id="messages" showDetail="true" closable="true"
+				autoUpdate="true" />
+			
+			<p:link outcome="GestaoIntiEPubli" value="Intimações e Publicações"/>
+			<p:link outcome="GestaoCliente" value="Clientes"/>
+
+			<p:commandButton value="Novo"
+				actionListener="#{gestaoProcessoView.prepararDialog(null)}"
+				oncomplete="PF('wdProcesso').show();" update="@form" />
+
+			<p:dialog header="processo" widgetVar="wdProcesso" minHeight="40"
+				width="800" showEffect="fade">
+				<p:outputLabel for="@next" value="Número do Processo" />
+				<p:inputText id="numero"
+					value="#{gestaoProcessoView.processo.numero}" />
+
+				<p:outputLabel for="@next" value="Cliente" />
+				<p:selectOneMenu id="cliente"
+					value="#{gestaoProcessoView.processo.cliente.id}">
+					<f:selectItems value="#{gestaoProcessoView.listaClientes}"
+						var="cli" itemValue="#{cli.id}" itemLabel="#{cli.nome}" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Salvar"
+					actionListener="#{gestaoProcessoView.salvar}"
+					oncomplete="PF('wdProcesso').hide();" update="@form" />
+				<p:commandButton value="Remover"
+					actionListener="#{gestaoProcessoView.deletar}"
+					oncomplete="PF('wdProcesso').hide();" update="@form"
+					style="color: red;"
+					rendered="#{gestaoProcessoView.processo.id ne null}" />
+
+			</p:dialog>
+
+			<p:dataTable value="#{gestaoProcessoView.listaProcessos}"
+				var="processo" emptyMessage="Nenhuma informação a ser exibida"
+				paginator="true" rows="10" paginatorPosition="bottom">
+
+				<p:column headerText="Processo" sortBy="#{processo.numero}">
+					<h:outputText value="#{processo.numero}" />
+				</p:column>
+
+				<p:column headerText="Cliente" sortBy="#{processo.cliente.nome}">
+					<h:outputText value="#{processo.cliente.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar">
+					<p:commandButton value="Editar"
+						actionListener="#{gestaoProcessoView.prepararDialog(processo)}"
+						oncomplete="PF('wdProcesso').show();" update="@form" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

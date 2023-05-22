@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="WEB-INF/template/Layout.xhtml">
+
+	<ui:define name="titulo">
+		CRUD de IntiEPublis
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<f:metadata>
+			<f:viewAction action="#{gestaoIntiEPubliView.todasIntiEPublis}" />
+		</f:metadata>
+
+		<h:form>
+
+			<p:messages id="messages" showDetail="true" closable="true"
+				autoUpdate="true" />
+			
+			<p:link outcome="GestaoProcesso" value="Processos"/>
+			<p:link outcome="GestaoCliente" value="Clientes"/>
+
+			<p:commandButton value="Novo"
+				actionListener="#{gestaoIntiEPubliView.prepararDialog(null)}"
+				oncomplete="PF('wdIntiEPubli').show();" update="@form" />
+
+			<p:dialog header="intiEPubli" widgetVar="wdIntiEPubli" minHeight="40"
+				width="800" showEffect="fade">
+				<p:outputLabel for="@next" value="Tipo" />
+				<p:selectOneMenu id="tipo"
+					value="#{gestaoIntiEPubliView.intiEPubli.tipo}">
+					<f:selectItem itemValue="intimacao" itemLabel="Intimação" />
+					<f:selectItem itemValue="publicacao" itemLabel="Publicação" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="@next" value="Processo" />
+				<p:selectOneMenu id="processo"
+					value="#{gestaoIntiEPubliView.intiEPubli.processo.id}">
+					<f:selectItems value="#{gestaoIntiEPubliView.listaProcessos}"
+						var="pro" itemValue="#{pro.id}" itemLabel="#{pro.numero}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="@next" value="Data" />
+				<p:calendar id="data"
+					value="#{gestaoIntiEPubliView.intiEPubli.data}"
+					pattern="dd/MM/yyyy" />
+
+				<p:outputLabel for="@next" value="Texto" />
+				<p:inputTextarea id="texto"
+					value="#{gestaoIntiEPubliView.intiEPubli.texto}" rows="6" />
+
+				<p:commandButton value="Salvar"
+					actionListener="#{gestaoIntiEPubliView.salvar}"
+					oncomplete="PF('wdIntiEPubli').hide();" update="@form" />
+				<p:commandButton value="Remover"
+					actionListener="#{gestaoIntiEPubliView.deletar}"
+					oncomplete="PF('wdIntiEPubli').hide();" update="@form"
+					style="color: red;"
+					rendered="#{gestaoIntiEPubliView.intiEPubli.id ne null}" />
+
+			</p:dialog>
+
+			<p:dataTable value="#{gestaoIntiEPubliView.listaIntiEPublis}"
+				var="intiEPubli" emptyMessage="Nenhuma informação a ser exibida"
+				paginator="true" rows="10" paginatorPosition="bottom">
+
+				<p:column headerText="Data" sortBy="#{intiEPubli.data}">
+					<h:outputText value="#{intiEPubli.data}">
+						<f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Texto" sortBy="#{intiEPubli.texto}">
+					<h:outputText value="#{intiEPubli.texto}" />
+				</p:column>
+
+				<p:column headerText="Processo"
+					sortBy="#{intiEPubli.processo.numero}">
+					<h:outputText value="#{intiEPubli.processo.numero}" />
+				</p:column>
+
+				<p:column headerText="Cliente"
+					sortBy="#{intiEPubli.processo.cliente.nome}">
+					<h:outputText value="#{intiEPubli.processo.cliente.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar">
+					<p:commandButton value="Editar"
+						actionListener="#{gestaoIntiEPubliView.prepararDialog(intiEPubli)}"
+						oncomplete="PF('wdIntiEPubli').show();" update="@form" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

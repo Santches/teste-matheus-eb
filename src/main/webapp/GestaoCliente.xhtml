@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="WEB-INF/template/Layout.xhtml">
+
+	<ui:define name="titulo">
+		CRUD de Clientes
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<f:metadata>
+			<f:viewAction action="#{gestaoClienteView.todosClientes}" />
+		</f:metadata>
+
+		<h:form>
+
+			<p:messages id="messages" showDetail="true" closable="true"
+				autoUpdate="true" />
+			<p:link outcome="GestaoProcesso" value="Processos"/>
+			<p:link outcome="GestaoIntiEPubli" value="Intimações e Publicações"/>
+			<p:commandButton value="Novo"
+				actionListener="#{gestaoClienteView.prepararDialog(null)}"
+				oncomplete="PF('wdCliente').show();" update="@form" />
+
+			<p:dialog header="Cliente" widgetVar="wdCliente" minHeight="40"
+				width="800" showEffect="fade">
+
+				<p:inputText value="#{gestaoClienteView.cliente.nome}" />
+
+				<p:commandButton value="Salvar"
+					actionListener="#{gestaoClienteView.salvar}"
+					oncomplete="PF('wdCliente').hide();" update="@form" />
+				<p:commandButton value="Remover"
+					actionListener="#{gestaoClienteView.deletar}"
+					oncomplete="PF('wdCliente').hide();" update="@form"
+					style="color: red;"
+					rendered="#{gestaoClienteView.cliente.id ne null}" />
+
+			</p:dialog>
+
+			<p:dataTable value="#{gestaoClienteView.listaClientes}" var="cliente"
+				emptyMessage="Nenhuma informação a ser exibida" paginator="true"
+				rows="10" paginatorPosition="bottom">
+
+				<p:column headerText="Cliente" sortBy="#{cliente.nome}">
+					<h:outputText value="#{cliente.nome}" />
+				</p:column>
+
+				<p:column headerText="Editar">
+					<p:commandButton value="Editar"
+						actionListener="#{gestaoClienteView.prepararDialog(cliente)}"
+						oncomplete="PF('wdCliente').show();" update="@form" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
