@@ -37,7 +37,7 @@ public class EmailOutlook {
 			message.setFrom(new InternetAddress(remetente));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
 			message.setSubject(assunto);
-			message.setText(conteudo);
+			message.setContent(conteudo, "text/html; charset=UTF-8");
 
 			// Enviar o e-mail
 			Transport.send(message);

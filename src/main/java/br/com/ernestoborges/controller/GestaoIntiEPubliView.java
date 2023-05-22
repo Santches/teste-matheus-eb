@@ -113,7 +113,46 @@ public class GestaoIntiEPubliView implements Serializable {
 	}
 	
 	public String tabelaEmail() {
-		return "Enviado com sucesso";
+
+		int countInti = 0;
+		int countPubli = 0;
+		for(IntiEPubli i : listaIntiEPublis) {
+			if(i.getTipo().equals("intimacao")) {
+				countInti++;
+			} else {
+				countPubli++;
+			}
+		}
+		return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+				+ "<html>"
+				+ "<head>"
+				+ "<style>"
+				+ "    table, th, td {"
+				+ "        border-collapse: collapse;"
+				+ "        border: 1px solid black;"
+				+ "        text-align: center;"
+				+ "    }"
+				+ "    .header {"
+				+ "        background-color: lightblue;"
+				+ "    }"
+				+ "</style>"
+				+ "</head>"
+				+ "<body>"
+				+ "<table>"
+				+ "		<tr>"
+				+ "			<th class=\"header\">Intimação</th>"
+				+ "			<td>" + countInti + "</td>"
+				+ "		</tr>"
+				+ "		<tr>"
+				+ "			<th class=\"header\">Publicação</th>"
+				+ "			<td>" + countPubli + "</td>"
+				+ "		</tr>"
+				+ "		<tr>"
+				+ "			<th class=\"header\">Total</th>"
+				+ "			<td>" + listaIntiEPublis.size() + "</td>"
+				+ "		</tr>"
+				+ "</table>"
+				+ "</body></html>";
 	}
 
 	public List<IntiEPubli> getListaIntiEPublis() {
