@@ -9,11 +9,16 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.Exporter;
+
 import br.com.ernestoborges.model.Cliente;
 import br.com.ernestoborges.model.IntiEPubli;
 import br.com.ernestoborges.model.Processo;
 import br.com.ernestoborges.repository.IntiEPubliRepository;
 import br.com.ernestoborges.repository.ProcessoRepository;
+import br.com.ernestoborges.util.EmailOutlook;
+import br.com.ernestoborges.util.TextExporter;
 
 @Named
 @ViewScoped
@@ -27,10 +32,14 @@ public class GestaoIntiEPubliView implements Serializable {
 	@Inject
 	private ProcessoRepository processoRepository;
 
+	private Exporter<DataTable> textExporter;
+	
 	private List<IntiEPubli> listaIntiEPublis;
 	private List<Processo> listaProcessos;
 
 	private IntiEPubli intiEPubli;
+	
+	private String remetente, senha, destinatario;
 
 	public void todasIntiEPublis() {
 		listaIntiEPublis = intiEPubliRepository.todas();
@@ -38,6 +47,7 @@ public class GestaoIntiEPubliView implements Serializable {
 		intiEPubli = new IntiEPubli();
 		intiEPubli.setProcesso(new Processo());
 		intiEPubli.getProcesso().setCliente(new Cliente());
+		textExporter = new TextExporter();
 	}
 
 	public void salvar() {
@@ -91,6 +101,20 @@ public class GestaoIntiEPubliView implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Não foi possível remover."));
 		}
 	}
+	
+	public void enviarEmail() {
+		if(EmailOutlook.enviar(remetente, senha, destinatario, "Quantidade de Intimações e Publicações", tabelaEmail())) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "E-mail enviado com sucesso!"));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "ao enviar o E-mail."));
+		}
+	}
+	
+	public String tabelaEmail() {
+		return "Enviado com sucesso";
+	}
 
 	public List<IntiEPubli> getListaIntiEPublis() {
 		return listaIntiEPublis;
@@ -106,5 +130,37 @@ public class GestaoIntiEPubliView implements Serializable {
 
 	public void setIntiEPubli(IntiEPubli intiEPubli) {
 		this.intiEPubli = intiEPubli;
+	}
+	
+	public Exporter<DataTable> getTextExporter() {
+        return textExporter;
+    }
+
+    public void setTextExporter(Exporter<DataTable> textExporter) {
+        this.textExporter = textExporter;
+    }
+
+    public String getRemetente() {
+		return remetente;
+	}
+
+	public void setRemetente(String remetente) {
+		this.remetente = remetente;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getDestinatario() {
+		return destinatario;
+	}
+
+	public void setDestinatario(String destinatario) {
+		this.destinatario = destinatario;
 	}
 }

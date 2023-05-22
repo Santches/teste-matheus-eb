@@ -64,37 +64,68 @@
 
 			</p:dialog>
 
-			<p:dataTable value="#{gestaoIntiEPubliView.listaIntiEPublis}"
+			<p:dataTable id="tbl" value="#{gestaoIntiEPubliView.listaIntiEPublis}"
 				var="intiEPubli" emptyMessage="Nenhuma informação a ser exibida"
 				paginator="true" rows="10" paginatorPosition="bottom">
-
+				
+				<p:column headerText="Tipo" sortBy="#{intiEPubli.tipo}">
+					<h:outputText value="Intimação" rendered="#{intiEPubli.tipo eq 'intimacao'}" />
+					<h:outputText value="Publicação" rendered="#{intiEPubli.tipo eq 'publicacao'}" />
+				</p:column>
+												
 				<p:column headerText="Data" sortBy="#{intiEPubli.data}">
 					<h:outputText value="#{intiEPubli.data}">
 						<f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
 					</h:outputText>
 				</p:column>
 				
-				<p:column headerText="Texto" sortBy="#{intiEPubli.texto}">
+				<p:column headerText="Texto" sortBy="#{intiEPubli.texto}" visible="true">
 					<h:outputText value="#{intiEPubli.texto}" />
 				</p:column>
 
-				<p:column headerText="Processo"
+				<p:column headerText="Processo" visible="true"
 					sortBy="#{intiEPubli.processo.numero}">
 					<h:outputText value="#{intiEPubli.processo.numero}" />
 				</p:column>
 
-				<p:column headerText="Cliente"
+				<p:column headerText="Cliente" visible="true"
 					sortBy="#{intiEPubli.processo.cliente.nome}">
 					<h:outputText value="#{intiEPubli.processo.cliente.nome}" />
 				</p:column>
 
-				<p:column headerText="Editar">
+				<p:column headerText="Editar" exportable="false">
 					<p:commandButton value="Editar"
 						actionListener="#{gestaoIntiEPubliView.prepararDialog(intiEPubli)}"
 						oncomplete="PF('wdIntiEPubli').show();" update="@form" />
 				</p:column>
 
 			</p:dataTable>
+			
+			<p:commandButton value="XLSX" styleClass="mr-2 mb-2">
+            	<p:dataExporter type="xlsxstream" target="tbl" fileName="inti_e_publis" />
+            </p:commandButton>
+            
+            <p:commandButton value="E-mail"
+				actionListener="#{gestaoIntiEPubliView.prepararDialogEmail()}"
+				oncomplete="PF('wdEmail').show();" update="@form" />
+
+			<p:dialog header="Email" widgetVar="wdEmail" minHeight="40" width="800" showEffect="fade">
+				
+				<p:outputLabel for="@next" value="Remetente" />
+				<p:inputText id="remetente" value="#{gestaoIntiEPubliView.remetente}" />
+				
+				<p:outputLabel for="@next" value="Senha" />
+				<p:inputText type="password" id="senha" value="#{gestaoIntiEPubliView.senha}" />
+				
+				<p:separator />
+				
+				<p:outputLabel for="@next" value="Destinatário" />
+				<p:inputText id="destinatario" value="#{gestaoIntiEPubliView.destinatario}" />
+				
+				<p:commandButton value="Enviar"
+					actionListener="#{gestaoIntiEPubliView.enviarEmail}"
+					oncomplete="PF('wdEmail').hide();" update="@form" />
+			</p:dialog>
 
 		</h:form>
 
