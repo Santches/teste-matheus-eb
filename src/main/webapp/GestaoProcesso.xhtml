@@ -20,36 +20,58 @@
 
 			<p:messages id="messages" showDetail="true" closable="true"
 				autoUpdate="true" />
-			
-			<p:link outcome="GestaoIntiEPubli" value="Intimações e Publicações"/>
-			<p:link outcome="GestaoCliente" value="Clientes"/>
 
-			<p:commandButton value="Novo"
+			<div style="margin-bottom: 25px;">
+				<div style="display: inline; margin-right: 16px;">
+					<p:link outcome="GestaoCliente" value="Clientes" />
+				</div>
+				<div style="display: inline; margin-left: 16px;">
+					<p:link outcome="GestaoIntiEPubli" value="Intimações e Publicações" />
+				</div>
+			</div>
+
+			<p:commandButton value="Novo" icon="pi pi-plus"
+				style="margin-bottom: 25px;"
 				actionListener="#{gestaoProcessoView.prepararDialog(null)}"
 				oncomplete="PF('wdProcesso').show();" update="@form" />
 
-			<p:dialog header="processo" widgetVar="wdProcesso" minHeight="40"
+			<p:dialog header="Processo" widgetVar="wdProcesso" minHeight="40"
 				width="800" showEffect="fade">
-				<p:outputLabel for="@next" value="Número do Processo" />
-				<p:inputText id="numero"
-					value="#{gestaoProcessoView.processo.numero}" />
+				<h:panelGroup styleClass="ui-fluid ui-g-12 ui-md-12 ui-lg-12">
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-6">
 
-				<p:outputLabel for="@next" value="Cliente" />
-				<p:selectOneMenu id="cliente"
-					value="#{gestaoProcessoView.processo.cliente.id}">
-					<f:selectItems value="#{gestaoProcessoView.listaClientes}"
-						var="cli" itemValue="#{cli.id}" itemLabel="#{cli.nome}" />
-				</p:selectOneMenu>
+						<p:outputLabel for="@next" value="Número do Processo" />
+						<p:inputText id="numero"
+							value="#{gestaoProcessoView.processo.numero}" />
+					</h:panelGroup>
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-6">
 
-				<p:commandButton value="Salvar"
-					actionListener="#{gestaoProcessoView.salvar}"
-					oncomplete="PF('wdProcesso').hide();" update="@form" />
-				<p:commandButton value="Remover"
-					actionListener="#{gestaoProcessoView.deletar}"
-					oncomplete="PF('wdProcesso').hide();" update="@form"
-					style="color: red;"
-					rendered="#{gestaoProcessoView.processo.id ne null}" />
+						<p:outputLabel for="@next" value="Cliente" />
+						<p:selectOneMenu id="cliente"
+							value="#{gestaoProcessoView.processo.cliente.id}">
+							<f:selectItems value="#{gestaoProcessoView.listaClientes}"
+								var="cli" itemValue="#{cli.id}" itemLabel="#{cli.nome}" />
+						</p:selectOneMenu>
 
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-2">
+
+						<p:commandButton value="Salvar" icon="pi pi-save"
+							actionListener="#{gestaoProcessoView.salvar}"
+							oncomplete="PF('wdProcesso').hide();" update="@form" />
+
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-2">
+
+						<p:commandButton value="Remover" styleClass="ui-button-danger"
+							icon="pi pi-times" actionListener="#{gestaoProcessoView.deletar}"
+							oncomplete="PF('wdProcesso').hide();" update="@form"
+							rendered="#{gestaoProcessoView.processo.id ne null}" />
+
+					</h:panelGroup>
+				</h:panelGroup>
 			</p:dialog>
 
 			<p:dataTable value="#{gestaoProcessoView.listaProcessos}"
@@ -65,7 +87,8 @@
 				</p:column>
 
 				<p:column headerText="Editar">
-					<p:commandButton value="Editar"
+					<p:commandButton value="Editar" styleClass="ui-button-secondary"
+						icon="pi pi-pencil"
 						actionListener="#{gestaoProcessoView.prepararDialog(processo)}"
 						oncomplete="PF('wdProcesso').show();" update="@form" />
 				</p:column>

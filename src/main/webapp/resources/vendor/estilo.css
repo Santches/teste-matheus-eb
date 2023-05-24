@@ -10,7 +10,7 @@ body {
 header {
 	padding: 5px;
 	margin-bottom: 20px;
-	height: 30px;
+	height: 80px;
 	background-color: #545454;
 	color: #fff;
 	text-align: center;
@@ -19,7 +19,7 @@ header {
 
 img {
 	margin-top: -10px;
-	width: 190px;
+	width: 400px;
 }
 
 #conteudo {
@@ -36,6 +36,8 @@ h1 {
 
 h2 {
 	text-align: center;
+	font-family: Segoe UI;
+	font-size: 30px;
 }
 
 footer {

@@ -7,7 +7,7 @@
 	template="WEB-INF/template/Layout.xhtml">
 
 	<ui:define name="titulo">
-		CRUD de Clientes
+		CRUD Clientes
 	</ui:define>
 
 	<ui:define name="conteudo">
@@ -20,26 +20,44 @@
 
 			<p:messages id="messages" showDetail="true" closable="true"
 				autoUpdate="true" />
-			<p:link outcome="GestaoProcesso" value="Processos"/>
-			<p:link outcome="GestaoIntiEPubli" value="Intimações e Publicações"/>
-			<p:commandButton value="Novo"
+
+			<div style="margin-bottom: 25px;">
+				<div style="display: inline; margin-right: 16px;">
+					<p:link outcome="GestaoProcesso" value="Processos" />
+				</div>
+				<div style="display: inline; margin-left: 16px;">
+					<p:link outcome="GestaoIntiEPubli" value="Intimações e Publicações" />
+				</div>
+			</div>
+
+			<p:commandButton value="Novo" icon="pi pi-plus"
+				style="margin-bottom: 25px;"
 				actionListener="#{gestaoClienteView.prepararDialog(null)}"
 				oncomplete="PF('wdCliente').show();" update="@form" />
 
 			<p:dialog header="Cliente" widgetVar="wdCliente" minHeight="40"
 				width="800" showEffect="fade">
+				<h:panelGroup styleClass="ui-fluid ui-g-12 ui-md-12 ui-lg-12">
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-12">
+						<p:outputLabel for="@next" value="Nome do Cliente" />
+						<p:inputText id="cliente"
+							value="#{gestaoClienteView.cliente.nome}" />
+					</h:panelGroup>
+				</h:panelGroup>
 
-				<p:inputText value="#{gestaoClienteView.cliente.nome}" />
-
-				<p:commandButton value="Salvar"
-					actionListener="#{gestaoClienteView.salvar}"
-					oncomplete="PF('wdCliente').hide();" update="@form" />
-				<p:commandButton value="Remover"
-					actionListener="#{gestaoClienteView.deletar}"
-					oncomplete="PF('wdCliente').hide();" update="@form"
-					style="color: red;"
-					rendered="#{gestaoClienteView.cliente.id ne null}" />
-
+				<h:panelGroup styleClass="ui-fluid ui-g-12 ui-md-12 ui-lg-12">
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-2">
+						<p:commandButton value="Salvar" icon="pi pi-save"
+							actionListener="#{gestaoClienteView.salvar}"
+							oncomplete="PF('wdCliente').hide();" update="@form" />
+					</h:panelGroup>
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-2">
+						<p:commandButton value="Remover" styleClass="ui-button-danger"
+							icon="pi pi-times" actionListener="#{gestaoClienteView.deletar}"
+							oncomplete="PF('wdCliente').hide();" update="@form"
+							rendered="#{gestaoClienteView.cliente.id ne null}" />
+					</h:panelGroup>
+				</h:panelGroup>
 			</p:dialog>
 
 			<p:dataTable value="#{gestaoClienteView.listaClientes}" var="cliente"
@@ -51,7 +69,8 @@
 				</p:column>
 
 				<p:column headerText="Editar">
-					<p:commandButton value="Editar"
+					<p:commandButton value="Editar" styleClass="ui-button-secondary"
+						icon="pi pi-pencil"
 						actionListener="#{gestaoClienteView.prepararDialog(cliente)}"
 						oncomplete="PF('wdCliente').show();" update="@form" />
 				</p:column>

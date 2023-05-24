@@ -7,7 +7,7 @@
 	template="WEB-INF/template/Layout.xhtml">
 
 	<ui:define name="titulo">
-		CRUD de IntiEPublis
+		CRUD de Intimações e Publicações
 	</ui:define>
 
 	<ui:define name="conteudo">
@@ -20,66 +20,107 @@
 
 			<p:messages id="messages" showDetail="true" closable="true"
 				autoUpdate="true" />
-			
-			<p:link outcome="GestaoProcesso" value="Processos"/>
-			<p:link outcome="GestaoCliente" value="Clientes"/>
 
-			<p:commandButton value="Novo"
+			<div style="margin-bottom: 25px;">
+				<div style="display: inline; margin-right: 16px;">
+					<p:link outcome="GestaoProcesso" value="Processos" />
+				</div>
+				<div style="display: inline; margin-left: 16px;">
+					<p:link outcome="GestaoCliente" value="Clientes" />
+				</div>
+			</div>
+
+			<p:commandButton value="Novo" icon="pi pi-plus"
+				style="margin-bottom: 25px;"
 				actionListener="#{gestaoIntiEPubliView.prepararDialog(null)}"
 				oncomplete="PF('wdIntiEPubli').show();" update="@form" />
 
-			<p:dialog header="intiEPubli" widgetVar="wdIntiEPubli" minHeight="40"
-				width="800" showEffect="fade">
-				<p:outputLabel for="@next" value="Tipo" />
-				<p:selectOneMenu id="tipo"
-					value="#{gestaoIntiEPubliView.intiEPubli.tipo}">
-					<f:selectItem itemValue="intimacao" itemLabel="Intimação" />
-					<f:selectItem itemValue="publicacao" itemLabel="Publicação" />
-				</p:selectOneMenu>
 
-				<p:outputLabel for="@next" value="Processo" />
-				<p:selectOneMenu id="processo"
-					value="#{gestaoIntiEPubliView.intiEPubli.processo.id}">
-					<f:selectItems value="#{gestaoIntiEPubliView.listaProcessos}"
-						var="pro" itemValue="#{pro.id}" itemLabel="#{pro.numero}" />
-				</p:selectOneMenu>
+			<p:dialog header="Intimação ou Publicação" widgetVar="wdIntiEPubli"
+				minHeight="40" width="800" showEffect="fade">
 
-				<p:outputLabel for="@next" value="Data" />
-				<p:calendar id="data"
-					value="#{gestaoIntiEPubliView.intiEPubli.data}"
-					pattern="dd/MM/yyyy" />
+				<h:panelGroup styleClass="ui-fluid ui-g-12 ui-md-12 ui-lg-12">
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-4">
 
-				<p:outputLabel for="@next" value="Texto" />
-				<p:inputTextarea id="texto"
-					value="#{gestaoIntiEPubliView.intiEPubli.texto}" rows="6" />
+						<p:outputLabel for="@next" value="Tipo" />
+						<p:selectOneMenu id="tipo"
+							value="#{gestaoIntiEPubliView.intiEPubli.tipo}">
+							<f:selectItem itemValue="intimacao" itemLabel="Intimação" />
+							<f:selectItem itemValue="publicacao" itemLabel="Publicação" />
+						</p:selectOneMenu>
 
-				<p:commandButton value="Salvar"
-					actionListener="#{gestaoIntiEPubliView.salvar}"
-					oncomplete="PF('wdIntiEPubli').hide();" update="@form" />
-				<p:commandButton value="Remover"
-					actionListener="#{gestaoIntiEPubliView.deletar}"
-					oncomplete="PF('wdIntiEPubli').hide();" update="@form"
-					style="color: red;"
-					rendered="#{gestaoIntiEPubliView.intiEPubli.id ne null}" />
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-4">
+
+						<p:outputLabel for="@next" value="Processo" />
+						<p:selectOneMenu id="processo"
+							value="#{gestaoIntiEPubliView.intiEPubli.processo.id}">
+							<f:selectItems value="#{gestaoIntiEPubliView.listaProcessos}"
+								var="pro" itemValue="#{pro.id}" itemLabel="#{pro.numero}" />
+						</p:selectOneMenu>
+
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-4">
+
+						<p:outputLabel for="@next" value="Data" />
+						<p:calendar id="data"
+							value="#{gestaoIntiEPubliView.intiEPubli.data}"
+							pattern="dd/MM/yyyy" />
+
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-12">
+
+						<p:outputLabel for="@next" value="Texto" />
+						<p:inputTextarea id="texto"
+							value="#{gestaoIntiEPubliView.intiEPubli.texto}" rows="6" />
+
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-3">
+
+						<p:commandButton value="Salvar" icon="pi pi-save"
+							actionListener="#{gestaoIntiEPubliView.salvar}"
+							oncomplete="PF('wdIntiEPubli').hide();" update="@form" />
+
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-3">
+
+						<p:commandButton value="Remover" styleClass="ui-button-danger"
+							icon="pi pi-times"
+							actionListener="#{gestaoIntiEPubliView.deletar}"
+							oncomplete="PF('wdIntiEPubli').hide();" update="@form"
+							rendered="#{gestaoIntiEPubliView.intiEPubli.id ne null}" />
+
+					</h:panelGroup>
+
+				</h:panelGroup>
 
 			</p:dialog>
 
-			<p:dataTable id="tbl" value="#{gestaoIntiEPubliView.listaIntiEPublis}"
-				var="intiEPubli" emptyMessage="Nenhuma informação a ser exibida"
-				paginator="true" rows="10" paginatorPosition="bottom">
-				
+			<p:dataTable id="tbl"
+				value="#{gestaoIntiEPubliView.listaIntiEPublis}" var="intiEPubli"
+				emptyMessage="Nenhuma informação a ser exibida" paginator="true"
+				rows="10" paginatorPosition="bottom">
+
 				<p:column headerText="Tipo" sortBy="#{intiEPubli.tipo}">
-					<h:outputText value="Intimação" rendered="#{intiEPubli.tipo eq 'intimacao'}" />
-					<h:outputText value="Publicação" rendered="#{intiEPubli.tipo eq 'publicacao'}" />
+					<h:outputText value="Intimação"
+						rendered="#{intiEPubli.tipo eq 'intimacao'}" />
+					<h:outputText value="Publicação"
+						rendered="#{intiEPubli.tipo eq 'publicacao'}" />
 				</p:column>
-												
+
 				<p:column headerText="Data" sortBy="#{intiEPubli.data}">
 					<h:outputText value="#{intiEPubli.data}">
-						<f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+						<f:convertDateTime pattern="dd/MM/yyyy" type="date" />
 					</h:outputText>
 				</p:column>
-				
-				<p:column headerText="Texto" sortBy="#{intiEPubli.texto}" visible="true">
+
+				<p:column headerText="Texto" sortBy="#{intiEPubli.texto}"
+					visible="true">
 					<h:outputText value="#{intiEPubli.texto}" />
 				</p:column>
 
@@ -94,36 +135,69 @@
 				</p:column>
 
 				<p:column headerText="Editar" exportable="false">
-					<p:commandButton value="Editar"
+					<p:commandButton value="Editar" styleClass="ui-button-secondary"
+						icon="pi pi-pencil"
 						actionListener="#{gestaoIntiEPubliView.prepararDialog(intiEPubli)}"
 						oncomplete="PF('wdIntiEPubli').show();" update="@form" />
 				</p:column>
 
 			</p:dataTable>
-			
-			<p:commandButton value="XLSX" styleClass="mr-2 mb-2">
-            	<p:dataExporter type="xlsxstream" target="tbl" fileName="inti_e_publis" />
-            </p:commandButton>
-            
-            <p:commandButton value="E-mail"
-				oncomplete="PF('wdEmail').show();" update="@form" />
 
-			<p:dialog header="Email" widgetVar="wdEmail" minHeight="40" width="800" showEffect="fade">
+			<h:panelGroup styleClass="ui-fluid ui-g-12 ui-md-12 ui-lg-12" style="margin-top: 15px;">
+				<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-8" />
+
+				<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-2">
+					<p:commandButton value="E-mail" oncomplete="PF('wdEmail').show();"
+						styleClass="ui-button-help" icon="pi pi-envelope" update="@form" />
+				</h:panelGroup>
+
+				<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-2">
+					<p:commandButton value="XLSX"
+						styleClass="mr-2 mb-2 ui-button-success" icon="pi pi-file-excel">
+						<p:dataExporter type="xlsxstream" target="tbl"
+							fileName="inti_e_publis" />
+					</p:commandButton>
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<p:dialog header="Email" widgetVar="wdEmail" minHeight="40"
+				width="800" showEffect="fade">
+
+				<h:panelGroup styleClass="ui-fluid ui-g-12 ui-md-12 ui-lg-12">
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-6">
+
+
+						<p:outputLabel for="@next" value="Remetente" />
+						<p:inputText id="remetente"
+							value="#{gestaoIntiEPubliView.remetente}" />
+					</h:panelGroup>
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-6">
+
+						<p:outputLabel for="@next" value="Senha" />
+						<p:inputText type="password" id="senha"
+							value="#{gestaoIntiEPubliView.senha}" />
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-12"
+						style="margin-top: 10px; margin-bottom: 10px;">
+						<p:separator />
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-12">
+						<p:outputLabel for="@next" value="Destinatário" />
+						<p:inputText id="destinatario"
+							value="#{gestaoIntiEPubliView.destinatario}" />
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="ui-g-12 ui-md-12 ui-lg-12">
+						<p:commandButton value="Enviar" styleClass="ui-button-info"
+							icon="pi pi-send"
+							actionListener="#{gestaoIntiEPubliView.enviarEmail}"
+							oncomplete="PF('wdEmail').hide();" update="@form" />
+					</h:panelGroup>
+
+				</h:panelGroup>
 				
-				<p:outputLabel for="@next" value="Remetente" />
-				<p:inputText id="remetente" value="#{gestaoIntiEPubliView.remetente}" />
-				
-				<p:outputLabel for="@next" value="Senha" />
-				<p:inputText type="password" id="senha" value="#{gestaoIntiEPubliView.senha}" />
-				
-				<p:separator />
-				
-				<p:outputLabel for="@next" value="Destinatário" />
-				<p:inputText id="destinatario" value="#{gestaoIntiEPubliView.destinatario}" />
-				
-				<p:commandButton value="Enviar"
-					actionListener="#{gestaoIntiEPubliView.enviarEmail}"
-					oncomplete="PF('wdEmail').hide();" update="@form" />
 			</p:dialog>
 
 		</h:form>
