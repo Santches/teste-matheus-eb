@@ -58,6 +58,13 @@ public class GestaoIntiEPubliView implements Serializable {
 						new FacesMessage(FacesMessage.SEVERITY_WARN, "Alerta", "O texto está vazio."));
 				return;
 			}
+			
+			if (getIntiEPubli().getData() == null) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Alerta", "A data deve ser preenchida."));
+				return;
+			}
+			
 			if (getIntiEPubli().getId() == null) {
 				List<Processo> listVerificar = processoRepository.pesquisar(getIntiEPubli().getTexto());
 				for (Processo p : listVerificar) {
